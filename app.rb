@@ -46,12 +46,23 @@ module Pustefix
           File.file?(file) && file_types[ext]
         end.map do |file|
           ext = File.extname(file).gsub /\./, ''
-          {name: File.basename(file),
-           contents: File.read(file),
-           path: file,
-           syntax: file_types[ext],
-           history: []
-          }
+          text_contents = File.read(file)
+
+          begin
+            text_contents.to_json
+            {name: File.basename(file),
+             contents: text_contents,
+             path: file,
+             syntax: file_types[ext],
+             history: []
+            }
+          rescue
+            {
+              name: File.basename(file),
+              contents: 'invalid contents'
+            }
+          end
+
         end
         {name: dir, files: files}
       end.reject { |d| d[:files].empty? }
