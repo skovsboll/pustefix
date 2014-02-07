@@ -16,22 +16,22 @@ require 'opal-jquery'
 
 module Pustefix
 # Application:::::::::::::::::::::::::::::::::::::::::::::::::::
-class StylusHandler < Sinatra::Base
-  set :views, File.dirname(__FILE__) + '/stylus'
+  class StylusHandler < Sinatra::Base
+    set :views, File.dirname(__FILE__) + '/stylus'
 
-  get '/css/styles.css' do
-    stylus :styles
+    get '/css/styles.css' do
+      stylus :styles
+    end
   end
-end
 
-class OpalHandler < Sinatra::Base
-  get '/js/*.js' do
-    filename = params[:splat].first
-    opal_builder = Opal::Builder.new
-    opal_builder.append_path File.dirname(__FILE__) + '/opal'
-    opal_builder.build filename.to_sym
+  class OpalHandler < Sinatra::Base
+    get '/js/*.js' do
+      filename = params[:splat].first
+      opal_builder = Opal::Builder.new
+      opal_builder.append_path File.dirname(__FILE__) + '/opal'
+      opal_builder.build filename.to_sym
+    end
   end
-end
 
   class Api < Sinatra::Base
     get '/api/*' do
@@ -54,24 +54,19 @@ end
     end
   end
 
-class MyApp < Sinatra::Base
-  use StylusHandler
+  class MyApp < Sinatra::Base
+    use StylusHandler
     use Api
     #use OpalHandler
 
-  # Configuration:::::::::::::::::::::::::::::::::::::::::::::::
-  set :public_folder, File.dirname(__FILE__) + '/static'
-  set :views, File.dirname(__FILE__) + '/views'
+    # Configuration:::::::::::::::::::::::::::::::::::::::::::::::
+    set :public_folder, File.dirname(__FILE__) + '/static'
+    set :views, File.dirname(__FILE__) + '/views'
 
-  # Route Handlers::::::::::::::::::::::::::::::::::::::::::::::
+    # Route Handlers::::::::::::::::::::::::::::::::::::::::::::::
     get '/projects/*' do
-      @path = params[:splat]
-    slim :index
+      api_path = '/api/' + params[:splat]*'/'
+      slim :index, :locals => {path: api_path}
+    end
   end
-end
-
-if __FILE__ == $0
-  MyApp.run! :port => 4567
-  end
-
 end
