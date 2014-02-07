@@ -1,0 +1,19 @@
+{
+    project_name: 'Demo',
+    folders: [
+        name: 'app',
+        files: [
+            {
+                name: 'file1.rb',
+                contents: '',
+                history: [
+                    {
+                        sha: '87457348',
+                        time: 3843493434.0,
+                        contents: ''
+                    }
+                ]
+            }
+        ]
+    ]
+}
