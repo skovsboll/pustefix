@@ -6,12 +6,16 @@ html data-ng-app="pustefix"
     link rel="stylesheet" href="/js/vendor/codemirror/theme/solarized.css"
     link rel="stylesheet" href="/css/styles.css"
   body data-ng-controller="PustefixMainController as pustefix"
-    div
-      span
-        | {{ pustefix.model | json }}
-      h1
-        | Pustefix
-      div data-ui-codemirror=""
+
+    article.bubble data-ng-repeat="folder in pustefix.model.folders"
+      h4
+        | {{folder.name}}
+      section data-ng-repeat="file in folder.files"
+        header
+          | {{file.name}}
+        div
+          div ui-codemirror="pustefix.editorOptions" data-ng-model="file.contents" data-ui-codemirror-opts="{ mode: file.syntax, theme: 'solarized dark' }"
+
 
     script src="/js/vendor/codemirror/lib/codemirror.js"
 
@@ -19,7 +23,6 @@ html data-ng-app="pustefix"
       script src="/js/vendor/codemirror/mode/#{mode}/#{mode}.js"
 
     script src="/js/vendor/angular/angular.js"
-    script src="/js/vendor/angular-ui-codemirror/ui-codemirror.js"
 
     script src="/js/app.js"
 
@@ -31,3 +34,5 @@ html data-ng-app="pustefix"
         .constant("API_PATH", "#{path}");
 
     script src="/js/api/services/tree.js"
+
+    script src="/js/codemirror/codemirror.js"

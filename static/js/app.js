@@ -1,8 +1,6 @@
-"use strict";
-
 angular
     .module("pustefix", [
-        "ui.codemirror",
+        "pustefix.codemirror",
         "pustefix.api"
     ])
     .controller("PustefixMainController", ["$tree", function ($tree) {

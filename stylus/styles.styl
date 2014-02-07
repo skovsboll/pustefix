@@ -1,29 +1,12 @@
-@import 'mixins'
-
-body
-  background-color :lightsteelblue
-  font-family "Gill Sans"
-  font-weight lighter
-  font-size 14pt
+@import "mixins"
 
 
 
-#container
-  width 400px
-  position relative
-  perspective(2000px)
+.CodeMirror
+  border-radius(20px)
+  height auto
+  //position absolute
 
-  .CodeMirror
-    transition(all 1s)
-    border-radius(20px)
-    padding 10px
-    position absolute
-    transform-style(preserve-3d)
-    height auto
-    .CodeMirror-scroll
-      overflow-y hidden
-      overflow-x auto
-
-    .flipped
-      transform(rotateX(70deg))
-
+  .CodeMirror-scroll
+    overflow-y hidden
+    overflow-x auto
