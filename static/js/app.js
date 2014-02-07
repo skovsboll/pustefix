@@ -2,5 +2,5 @@
 
 angular
     .module("pustefix", [
-        "pustefix.codemirror"
+        "ui.codemirror"
     ]);

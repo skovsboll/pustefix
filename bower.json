@@ -2,7 +2,8 @@
     "name": "Pustefix",
     "version": "0.0.1",
     "dependencies": {
+        "codemirror": "3.21.0",
         "angular": "1.2.11",
-        "codemirror": "3.21.0"
+        "angular-ui-codemirror": "0.1.0"
     }
 }
