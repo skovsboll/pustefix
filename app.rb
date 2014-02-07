@@ -15,8 +15,8 @@ class StylusHandler < Sinatra::Base
 
   set :views, File.dirname(__FILE__) + '/stylus'
 
-  get '/css/main.css' do
-    stylus :main
+  get '/css/styles.css' do
+    stylus :styles
   end
 
 end
@@ -33,7 +33,7 @@ end
 
 class MyApp < Sinatra::Base
   use StylusHandler
-  use OpalHandler
+  #use OpalHandler
 
   # Configuration:::::::::::::::::::::::::::::::::::::::::::::::
   set :public_folder, File.dirname(__FILE__) + '/static'
