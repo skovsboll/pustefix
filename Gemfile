@@ -9,6 +9,7 @@ gem 'sinatra-contrib'
 gem 'slim'
 gem 'therubyracer'
 gem 'stylus'
+gem 'json'
 
 gem 'opal'
 gem 'opal-jquery'

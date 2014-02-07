@@ -3,49 +3,75 @@
 # Libraries:::::::::::::::::::::::::::::::::::::::::::::::::::::::
 require 'rubygems'
 require 'sinatra/base'
+require 'sinatra/contrib'
+
 require 'slim'
 require 'stylus'
 require 'stylus/tilt'
+require 'json'
 
 require 'opal'
 require 'opal-jquery'
 
+
+module Pustefix
 # Application:::::::::::::::::::::::::::::::::::::::::::::::::::
-class StylusHandler < Sinatra::Base
+  class StylusHandler < Sinatra::Base
+    set :views, File.dirname(__FILE__) + '/stylus'
 
-  set :views, File.dirname(__FILE__) + '/stylus'
-
-  get '/css/main.css' do
-    stylus :main
+    get '/css/main.css' do
+      stylus :main
+    end
   end
 
-end
-
-class OpalHandler < Sinatra::Base
-
-  get '/js/*.js' do
-    filename = params[:splat].first
-    opal_builder = Opal::Builder.new
-    opal_builder.append_path File.dirname(__FILE__) + '/opal'
-    opal_builder.build filename.to_sym
-  end
-end
-
-class MyApp < Sinatra::Base
-  use StylusHandler
-  use OpalHandler
-
-  # Configuration:::::::::::::::::::::::::::::::::::::::::::::::
-  set :public_folder, File.dirname(__FILE__) + '/static'
-  set :views, File.dirname(__FILE__) + '/views'
-
-  # Route Handlers::::::::::::::::::::::::::::::::::::::::::::::
-  get '/' do
-    slim :index
+  class OpalHandler < Sinatra::Base
+    get '/js/*.js' do
+      filename = params[:splat].first
+      opal_builder = Opal::Builder.new
+      opal_builder.append_path File.dirname(__FILE__) + '/opal'
+      opal_builder.build filename.to_sym
+    end
   end
 
-end
+  class Api < Sinatra::Base
+    get '/api/*' do
+      project_path = File.expand_path(File.join('~', params[:splat]*'/'))
+      puts project_path
+      folders = Dir.glob(File.join(project_path, '**/*/')).map do |dir|
+        files = Dir.glob(File.join(dir, '*.rb')).map do |file|
+          {name: File.basename(file),
+           contents: File.read(file),
+           path: file,
+           syntax: 'ruby',
+           history: []
+          }
+        end
+        {name: dir, files: files}
+      end
+      folders.reject! { |d| d[:files].empty? }
+      project = {project_name: File.basename(project_path), folders: folders}
+      json project
+    end
+  end
 
-if __FILE__ == $0
-  MyApp.run! :port => 4567
+  class MyApp < Sinatra::Base
+    use StylusHandler
+    use Api
+    #use OpalHandler
+
+    # Configuration:::::::::::::::::::::::::::::::::::::::::::::::
+    set :public_folder, File.dirname(__FILE__) + '/static'
+    set :views, File.dirname(__FILE__) + '/views'
+
+    # Route Handlers::::::::::::::::::::::::::::::::::::::::::::::
+    get '/projects/*' do
+      @path = params[:splat]
+      slim :index
+    end
+  end
+
+  if __FILE__ == $0
+    MyApp.run! :port => 4567
+  end
+
 end

@@ -20,4 +20,4 @@ require './app'
 #run Rack::Cascade.new(apps)
 #
 
-run MyApp
+run Pustefix::MyApp.new

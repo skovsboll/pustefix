@@ -6,6 +6,7 @@
             {
                 name: 'file1.rb',
                 contents: '',
+                syntax: 'ruby',
                 history: [
                     {
                         sha: '87457348',
