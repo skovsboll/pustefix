@@ -12,6 +12,9 @@ html data-ng-app="pustefix"
           #container
 
     script src="/js/vendor/codemirror/lib/codemirror.js"
-    script src="/js/vendor/codemirror/mode/ruby/ruby.js"
+
+    - for mode in modes
+      script src="/js/vendor/codemirror/mode/#{mode}/#{mode}.js"
+
     script src="/js/app.js"
     script src="/js/directives/codemirror.js"

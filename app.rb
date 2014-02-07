@@ -34,21 +34,53 @@ module Pustefix
   end
 
   class Api < Sinatra::Base
-    get '/api/*' do
-      project_path = File.expand_path(File.join('~', params[:splat]*'/'))
-      puts project_path
-      folders = Dir.glob(File.join(project_path, '**/*/')).map do |dir|
-        files = Dir.glob(File.join(dir, '*.rb')).map do |file|
+    def enumerate_folders(project_path)
+
+      file_types = YAML.load_file File.join(File.dirname(__FILE__), 'config/modes.yaml')
+
+      Dir.glob(File.join(project_path, '**/')).map do |dir|
+        puts dir
+        files = Dir.glob(File.join(dir, '*'))
+        .select do |file|
+          ext = File.extname(file).gsub /\./, ''
+          File.file?(file) && file_types[ext]
+        end.map do |file|
+          ext = File.extname(file).gsub /\./, ''
           {name: File.basename(file),
            contents: File.read(file),
            path: file,
-           syntax: 'ruby',
+           syntax: file_types[ext],
            history: []
           }
         end
         {name: dir, files: files}
-      end
-      folders.reject! { |d| d[:files].empty? }
+      end.reject { |d| d[:files].empty? }
+    end
+
+    def find_modes(project_path)
+      file_types = YAML.load_file File.join(File.dirname(__FILE__), 'config/modes.yaml')
+
+      Dir.glob(File.join(project_path, '**/*'))
+      .select { |file| File.file?(file) }
+      .map { |file| File.extname(file).gsub /\./, '' }
+      .select { |ext| file_types[ext] }
+      .map { |ext| file_types[ext] }
+      .compact
+      .uniq
+    end
+
+
+    # ROUTES
+
+    get '/projects/*' do
+      project_path = File.expand_path(File.join('~', params[:splat]*'/'))
+      api_path = '/api/' + params[:splat]*'/'
+      slim :index, :locals => {path: api_path, modes: find_modes(project_path)}
+    end
+
+    get '/api/*' do
+      project_path = File.expand_path(File.join('~', params[:splat]*'/'))
+      folders = enumerate_folders(project_path)
       project = {project_name: File.basename(project_path), folders: folders}
       json project
     end
@@ -63,10 +95,5 @@ module Pustefix
     set :public_folder, File.dirname(__FILE__) + '/static'
     set :views, File.dirname(__FILE__) + '/views'
 
-    # Route Handlers::::::::::::::::::::::::::::::::::::::::::::::
-    get '/projects/*' do
-      api_path = '/api/' + params[:splat]*'/'
-      slim :index, :locals => {path: api_path}
-    end
   end
 end
