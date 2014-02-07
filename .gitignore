@@ -1,0 +1,40 @@
+#NuGet
+packages/
+
+# RUBY
+*.gem
+*.rbc
+.bundle
+.config
+coverage
+InstalledFiles
+lib/bundler/man
+pkg
+rdoc
+spec/reports
+test/tmp
+test/version_tmp
+tmp
+
+# YARD artifacts
+.yardoc
+_yardoc
+doc/
+
+#RubyMine
+*.xcuserstate
+.idea/*
+
+cache/
+log/
+*.css
+.idea/workspace.xml
+
+log/newrelic_agent.log
+
+cache/meta/4d/b1dccbcc2784a4c60fc4f76a419882fa345e9a
+
+*.iml
+# Autostuff
+*.html.less
+*.html.js

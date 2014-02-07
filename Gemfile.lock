@@ -1,0 +1,68 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    backports (3.5.0)
+    execjs (2.0.2)
+    hike (1.2.3)
+    json (1.8.1)
+    libv8 (3.16.14.3)
+    multi_json (1.8.4)
+    opal (0.5.5)
+      source_map
+    opal-jquery (0.1.2)
+      opal (~> 0.5.0)
+    opal-sprockets (0.3.0)
+      opal (~> 0.5.0)
+      sprockets
+    rack (1.5.2)
+    rack-protection (1.5.2)
+      rack
+    rack-test (0.6.2)
+      rack (>= 1.0)
+    rack-timeout (0.0.4)
+    ref (1.0.5)
+    sinatra (1.4.4)
+      rack (~> 1.4)
+      rack-protection (~> 1.4)
+      tilt (~> 1.3, >= 1.3.4)
+    sinatra-contrib (1.4.2)
+      backports (>= 2.0)
+      multi_json
+      rack-protection
+      rack-test
+      sinatra (~> 1.4.0)
+      tilt (~> 1.3)
+    slim (2.0.2)
+      temple (~> 0.6.6)
+      tilt (>= 1.3.3, < 2.1)
+    source_map (3.0.1)
+      json
+    sprockets (2.10.1)
+      hike (~> 1.2)
+      multi_json (~> 1.0)
+      rack (~> 1.0)
+      tilt (~> 1.1, != 1.3.0)
+    stylus (1.0.0)
+      execjs
+      stylus-source
+    stylus-source (0.38.0)
+    temple (0.6.7)
+    therubyracer (0.12.1)
+      libv8 (~> 3.16.14.0)
+      ref
+    tilt (1.4.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  opal
+  opal-jquery
+  opal-sprockets
+  rack
+  rack-timeout
+  sinatra
+  sinatra-contrib
+  slim
+  stylus
+  therubyracer
