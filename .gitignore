@@ -1,6 +1,3 @@
-#NuGet
-packages/
-
 # RUBY
 *.gem
 *.rbc
@@ -27,14 +24,5 @@ doc/
 
 cache/
 log/
-*.css
 .idea/workspace.xml
 
-log/newrelic_agent.log
-
-cache/meta/4d/b1dccbcc2784a4c60fc4f76a419882fa345e9a
-
-*.iml
-# Autostuff
-*.html.less
-*.html.js
