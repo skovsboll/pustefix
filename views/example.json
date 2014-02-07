@@ -5,15 +5,10 @@
         files: [
             {
                 name: 'file1.rb',
+                path: '/app/sub/file1.rb',
                 contents: '',
                 syntax: 'ruby',
-                history: [
-                    {
-                        sha: '87457348',
-                        time: 3843493434.0,
-                        contents: ''
-                    }
-                ]
+                history: '/api/history/app/sub/file1.rb'
             }
         ]
     ]

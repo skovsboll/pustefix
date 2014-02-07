@@ -13,6 +13,8 @@ require 'json'
 require 'opal'
 require 'opal-jquery'
 
+require_relative 'app/GitLogParser'
+
 
 module Pustefix
 # Application:::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -38,23 +40,23 @@ module Pustefix
 
       file_types = YAML.load_file File.join(File.dirname(__FILE__), 'config/modes.yaml')
 
-      Dir.glob(File.join(project_path, '**/')).map do |dir|
-        puts dir
+      Dir.glob(File.join(project_path, '**/')).map { |dir|
         files = Dir.glob(File.join(dir, '*'))
-        .select do |file|
-          ext = File.extname(file).gsub /\./, ''
-          File.file?(file) && file_types[ext]
-        end.map do |file|
-          ext = File.extname(file).gsub /\./, ''
-          {name: File.basename(file),
-           contents: File.read(file),
-           path: file,
-           syntax: file_types[ext],
-           history: []
-          }
+        .map do |file|
+          {file: file, ext: File.extname(file).gsub(/\./, '')}
+        end.select do |item|
+          File.file?(item[:file]) && file_types[item[:ext]]
+        end.map do |item|
+          file_path = item[:file]
+          {name: File.basename(file_path),
+           contents: File.read(file_path),
+           path: file_path,
+           syntax: file_types[item[:ext]],
+           history: File.join('/api/history/', file_path)}
         end
-        {name: dir, files: files}
-      end.reject { |d| d[:files].empty? }
+        relative_dir = dir.gsub project_path, ''
+        {name: relative_dir, files: files}
+      }.reject { |d| d[:files].empty? }
     end
 
     def find_modes(project_path)
@@ -74,16 +76,37 @@ module Pustefix
 
     get '/projects/*' do
       project_path = File.expand_path(File.join('~', params[:splat]*'/'))
-      api_path = '/api/' + params[:splat]*'/'
-      slim :index, :locals => {path: api_path, modes: find_modes(project_path)}
+      halt 404 unless File.exist? project_path
+      api_path = '/api/tree/' + params[:splat]*'/'
+      slim :index, :locals => {path: api_path,
+                               modes: find_modes(project_path)}
     end
 
-    get '/api/*' do
+    get '/api/tree/*' do
       project_path = File.expand_path(File.join('~', params[:splat]*'/'))
+      halt 404 unless File.exist? project_path
       folders = enumerate_folders(project_path)
       project = {project_name: File.basename(project_path), folders: folders}
       json project
     end
+
+    get '/api/history/*' do
+      file_path = File.expand_path(File.join('~', params[:splat]*'/'))
+      halt 404 unless File.exist? file_path
+      versions = []
+      Dir.chdir File.dirname(file_path) do
+        relative_file_path = file_path.gsub(Dir.getwd + '/', '')
+        raw_history = `git log --pretty="%H %cd %ae %s" -- #{relative_file_path}`
+        log_parser = GitLogParser.new
+        versions = raw_history.each_line.map do |line|
+          commit = log_parser.parse_line line
+          contents = `git show #{commit.sha}:#{relative_file_path}`
+          {path: file_path, contents: contents, sha: commit.sha, date: commit.date, email: commit.email, comment: commit.comment}
+        end
+      end
+      json versions
+    end
+
   end
 
   class MyApp < Sinatra::Base

@@ -15,5 +15,6 @@ gem 'opal'
 gem 'opal-jquery'
 gem 'opal-sprockets'
 
+gem 'rspec'
 
 
