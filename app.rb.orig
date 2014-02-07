@@ -19,9 +19,14 @@ module Pustefix
   class StylusHandler < Sinatra::Base
     set :views, File.dirname(__FILE__) + '/stylus'
 
-    get '/css/styles.css' do
-      stylus :styles
+<<<<<<< HEAD
+    get '/css/main.css' do
+      stylus :main
     end
+=======
+  get '/css/styles.css' do
+    stylus :styles
+>>>>>>> 9c4416d182f93b9426396ea604673e7a0975fb60
   end
 
   class OpalHandler < Sinatra::Base
@@ -54,10 +59,16 @@ module Pustefix
     end
   end
 
+<<<<<<< HEAD
   class MyApp < Sinatra::Base
     use StylusHandler
     use Api
     #use OpalHandler
+=======
+class MyApp < Sinatra::Base
+  use StylusHandler
+  #use OpalHandler
+>>>>>>> 9c4416d182f93b9426396ea604673e7a0975fb60
 
     # Configuration:::::::::::::::::::::::::::::::::::::::::::::::
     set :public_folder, File.dirname(__FILE__) + '/static'
@@ -65,8 +76,13 @@ module Pustefix
 
     # Route Handlers::::::::::::::::::::::::::::::::::::::::::::::
     get '/projects/*' do
-      api_path = '/api/' + params[:splat]*'/'
-      slim :index, :locals => {path: api_path}
+      @path = params[:splat]
+      slim :index
     end
   end
+
+  if __FILE__ == $0
+    MyApp.run! :port => 4567
+  end
+
 end
