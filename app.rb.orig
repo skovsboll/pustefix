@@ -42,19 +42,42 @@ module Pustefix
 
       Dir.glob(File.join(project_path, '**/')).map { |dir|
         files = Dir.glob(File.join(dir, '*'))
+<<<<<<< HEAD
         .map do |file|
           {file: file, ext: File.extname(file).gsub(/\./, '')}
-        end
-        .select do |item|
+        end.select do |item|
           File.file?(item[:file]) && file_types[item[:ext]]
-        end
-        .map do |item|
+        end.map do |item|
           file_path = item[:file]
           {name: File.basename(file_path),
            contents: File.read(file_path),
            path: file_path,
            syntax: file_types[item[:ext]],
            history: File.join('/api/history/', file_path)}
+=======
+        .select do |file|
+          ext = File.extname(file).gsub /\./, ''
+          File.file?(file) && file_types[ext]
+        end.map do |file|
+          ext = File.extname(file).gsub /\./, ''
+          text_contents = File.read(file)
+
+          begin
+            text_contents.to_json
+            {name: File.basename(file),
+             contents: text_contents,
+             path: file,
+             syntax: file_types[ext],
+             history: []
+            }
+          rescue
+            {
+              name: File.basename(file),
+              contents: 'invalid contents'
+            }
+          end
+
+>>>>>>> 4636738d23dcf930af1f76d7f6a26d6245150ad4
         end
         relative_dir = dir.gsub project_path, ''
         {name: relative_dir, files: files}
