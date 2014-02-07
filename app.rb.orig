@@ -16,22 +16,27 @@ require 'opal-jquery'
 
 module Pustefix
 # Application:::::::::::::::::::::::::::::::::::::::::::::::::::
-class StylusHandler < Sinatra::Base
-  set :views, File.dirname(__FILE__) + '/stylus'
+  class StylusHandler < Sinatra::Base
+    set :views, File.dirname(__FILE__) + '/stylus'
 
+<<<<<<< HEAD
+    get '/css/main.css' do
+      stylus :main
+    end
+=======
   get '/css/styles.css' do
     stylus :styles
+>>>>>>> 9c4416d182f93b9426396ea604673e7a0975fb60
   end
-end
 
-class OpalHandler < Sinatra::Base
-  get '/js/*.js' do
-    filename = params[:splat].first
-    opal_builder = Opal::Builder.new
-    opal_builder.append_path File.dirname(__FILE__) + '/opal'
-    opal_builder.build filename.to_sym
+  class OpalHandler < Sinatra::Base
+    get '/js/*.js' do
+      filename = params[:splat].first
+      opal_builder = Opal::Builder.new
+      opal_builder.append_path File.dirname(__FILE__) + '/opal'
+      opal_builder.build filename.to_sym
+    end
   end
-end
 
   class Api < Sinatra::Base
     get '/api/*' do
@@ -54,24 +59,30 @@ end
     end
   end
 
-class MyApp < Sinatra::Base
-  use StylusHandler
+<<<<<<< HEAD
+  class MyApp < Sinatra::Base
+    use StylusHandler
     use Api
     #use OpalHandler
+=======
+class MyApp < Sinatra::Base
+  use StylusHandler
+  #use OpalHandler
+>>>>>>> 9c4416d182f93b9426396ea604673e7a0975fb60
 
-  # Configuration:::::::::::::::::::::::::::::::::::::::::::::::
-  set :public_folder, File.dirname(__FILE__) + '/static'
-  set :views, File.dirname(__FILE__) + '/views'
+    # Configuration:::::::::::::::::::::::::::::::::::::::::::::::
+    set :public_folder, File.dirname(__FILE__) + '/static'
+    set :views, File.dirname(__FILE__) + '/views'
 
-  # Route Handlers::::::::::::::::::::::::::::::::::::::::::::::
+    # Route Handlers::::::::::::::::::::::::::::::::::::::::::::::
     get '/projects/*' do
       @path = params[:splat]
-    slim :index
+      slim :index
+    end
   end
-end
 
-if __FILE__ == $0
-  MyApp.run! :port => 4567
+  if __FILE__ == $0
+    MyApp.run! :port => 4567
   end
 
 end

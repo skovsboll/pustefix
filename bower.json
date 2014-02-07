@@ -1,0 +1,8 @@
+{
+    "name": "Pustefix",
+    "version": "0.0.1",
+    "dependencies": {
+        "angular": "1.2.11",
+        "codemirror": "3.21.0"
+    }
+}

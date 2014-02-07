@@ -1,25 +1,17 @@
-html
+html data-ng-app="pustefix"
   head
-    link rel="stylesheet" href="css/main.css"
     link rel="stylesheet" href="/codemirror/lib/codemirror.css"
     link rel="stylesheet" href="/codemirror/theme/solarized.css"
+    link rel="stylesheet" href="/css/styles.css"
   body
     div
-      h1 Pustefix
+      h1
+        Pustefix
         .folder
           h2 app
           #container
-        .folder
-          h2 app/routes
-          #container
 
+    script src="/js/vendor/codemirror/lib/codemirror.js"
+    script src="/js/vendor/codemirror/mode/ruby/ruby.js"
     script src="/js/app.js"
-    script src="/codemirror/lib/codemirror.js"
-    script src="/codemirror/mode/ruby/ruby.js"
-    javascript:
-      var myCodeMirror = CodeMirror(document.getElementById('container'), {
-        value: "class Hello\n  def mjallo\n    puts 'Yo!'\n  end\nend\n",
-        mode:  "ruby",
-        theme: "solarized dark"
-      });
-
+    script src="/js/directives/codemirror.js"
