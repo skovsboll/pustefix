@@ -50,8 +50,9 @@ module Pustefix
         end
         .map do |item|
           file_path = item[:file]
+          contents = File.read(file_path) rescue 'Invalid contents'
           {name: File.basename(file_path),
-           contents: File.read(file_path),
+           contents: contents,
            path: file_path,
            syntax: file_types[item[:ext]],
            history: File.join('/api/history/', file_path)}

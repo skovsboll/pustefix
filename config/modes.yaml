@@ -4,6 +4,8 @@ cs: clike
 c: clike
 cpp: clike
 java: clike
+m: clike
+h: clike
 clj: clojure
 cob: cobol
 coffee: coffeescript
